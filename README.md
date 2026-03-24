@@ -123,14 +123,13 @@ HAVING COUNT(M.idMission) > 100;
 C’est le critère de **Preuve** parce que la photo fige l'état réel du véhicule. En cas de contestation du client sur les frais facturés, la photo prouve que le dommage existait réellement au moment de l'expertise.
 
 ### 4.2.1 Chiffrement vs Hachage
-* Le **chiffrement** est réversible (avec une clé de déchiffrement, on retrouve le mot de passe en clair).
-* Le **hachage** est irréversible. C'est préférable car même si un pirate vole la base de données, il ne pourra pas relire les mots de passe des experts.
-* **Algorithme recommandé par l’ANSSI :** SHA-256 (ou plus récent comme Argon2).
+* **Chiffrement** : réversible (avec une clé, on retrouve le texte en clair).
+* **Hachage** : irréversible. C'est préférable car même si un pirate accède à la BDD, il ne pourra pas relire les mots de passe.
+* **Algorithme recommandé ANSSI :** SHA-256 (ou plus récent comme Argon2).
 
-### 4.3.1 Faille d'injection SQL
-* **Ligne concernée :** `$sql .= " WHERE idExpert = ".$id;`
-* **Explication :** La variable `$id` vient directement de l'URL (`$_GET['idExpert']`) sans être vérifiée. Un pirate peut écrire `?idExpert=1 OR 1=1`. La requête devient alors toujours vraie et le pirate peut récupérer les missions de tous les experts.
-* **Correction avec PDO (requête préparée) :**
+### 4.3 Faille d'injection SQL et Contrôle d'Accès
+* **Faille classique :** Sans contrôle, un pirate modifie `?idExpert=1` en `?idExpert=1 OR 1=1` = il voit toute la base (Injection SQL). Ou bien `?idExpert=3` pour surveiller un collègue (faille IDOR).
+* **Correction PDO (requête préparée sécurisée) :**
 ```php
 $sql .= " WHERE idExpert = :id AND dateMission = '".DATE("Y-m-d")."' ORDER BY heureDebut ASC";
 $stmt = $bdd->prepare($sql);
@@ -138,19 +137,27 @@ $stmt->execute(['id' => $id]);
 $resultat = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ```
 
-### 4.3.2 Faille de contrôle d'accès (IDOR)
-L'IDOR (Insecure Direct Object Reference) se produit quand un système ne vérifie pas si l'utilisateur a le droit d'accéder à l'objet qu'il demande. 
-Un pirate peut simplement modifier le chiffre dans l'URL pour mettre `?idExpert=3` ou `?idExpert=1`. Comme le serveur ne vérifie pas l'identité réelle de celui qui fait la demande, l'attaquant pourra espionner l'emploi du temps et les missions de tous ses collègues.
-
 ### 4.4.1 Trigger d'audit de suppression
 ```sql
 CREATE TRIGGER trig_audit_delete_mission
-ON MissionExpertise
-AFTER DELETE
-AS
+AFTER DELETE ON missionexpertise
+FOR EACH ROW
 BEGIN
-    INSERT INTO AUDIT_SUPPRESSION (idMissionSupprimee, dateSuppression)
-    SELECT idMission, GETDATE()
-    FROM deleted;
+    INSERT INTO audit_suppression (idMissionSupprimee, dateSuppression)
+    VALUES (OLD.idMission, NOW());
 END;
 ```
+
+---
+
+## 💻 Missions 5 & 6 – Pôle Pratique (Prototypage & Challenges)
+
+Le dépôt contient l'implémentation complète du prototype applicatif :
+- **Base de données SQL (`sql/restiloc_db.sql`)** : Structure + Données générées + Triggers de sécurité.
+- **API REST PHP (`api/`)** : Webservice PHP sécurisé via PDO (lutte contre injections SQL) renvoyant du JSON.
+- **Client Lourd JavaFX (`src/main/`)** : Interface graphique consommant l'API (parse le JSON et peuple une `TableView`).
+
+### 🛡️ Preuves des Challenges de Cybersécurité (Mission 6)
+1. **La Faille IDOR démontrée** : Nous avons forcé le client JavaFX à requêter `idExpert=2` (Sherlock Holmes) à la place de l'expert connecté (Lupin), prouvant la nécessité d'implémenter des Jetons (Tokens de Session).
+2. **Audit de sécurité fonctionnel** : Toute exécution de `DELETE FROM missionexpertise` est interceptée silencieusement par le Trigger SQL qui inscrit l'auteur et la date dans `AUDIT_SUPPRESSION`.
+3. **Logique métier "Absences"** : Ajout d'un système visuel permettant aux experts de signaler instantanément l'indisponibilité d'un client. Changement dynamique du modèle (`Mission.boolean indisponible`) avec application au layout visuel en temps-réel (RowFactory en rouge).
