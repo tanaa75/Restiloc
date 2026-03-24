@@ -164,7 +164,7 @@ Le dépôt contient l'implémentation complète du prototype applicatif :
 
 ---
 
-## 📝 Questions de Synthèse & Évaluation
+##  Questions de Synthèse & Évaluation
 
 **1. Quelle modélisation de base de données avez-vous choisie pour différencier les prestations "Peinture" et "Pièce" ?**
 > J'ai choisi l'héritage de données, avec une table mère "PREE" contenant les informations globales, et deux tables filles "PREE_Peinture" et "PREE_Piece" qui héritent de la clé primaire de PREE.
