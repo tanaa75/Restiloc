@@ -1,7 +1,7 @@
-# 🚗 ÉTUDE DE CAS RESTILOC
+#  ÉTUDE DE CAS RESTILOC
 **Date :** 23/03/2026
 
-## 📋 Mission 1 – Gestion des prestations de remise en état (PREE)
+##  Mission 1 – Gestion des prestations de remise en état (PREE)
 
 Pour intégrer la gestion des PREE (Prestations de Remise en État), voici les nouvelles tables à ajouter au schéma relationnel :
 
@@ -19,7 +19,7 @@ Pour intégrer la gestion des PREE (Prestations de Remise en État), voici les n
 
 ---
 
-## 📅 Mission 2 – Gestion des rendez-vous
+##  Mission 2 – Gestion des rendez-vous
 
 ### 2.1 Justification de la classe abstraite
 Une classe abstraite est une classe qui ne peut pas être instanciée (il est impossible de créer un objet avec `new Expertise()`). Dans le contexte de Restiloc, une "expertise" générique n'existe pas : c'est obligatoirement soit un `Pool_Garage`, soit un `RDV_Client`.
@@ -71,7 +71,7 @@ public int NbIndisponibilites(string leMotif) {
 
 ---
 
-## 📱 Mission 3 – Application mobile pour les experts
+##  Mission 3 – Application mobile pour les experts
 
 ### 3.1 Requêtes SQL
 **Requête 1 :** Liste des informations triée par date/heure croissantes
@@ -111,7 +111,7 @@ HAVING COUNT(M.idMission) > 100;
 
 ---
 
-## 🔒 Mission 4 – Cybersécurité et conformité RGPD
+##  Mission 4 – Cybersécurité et conformité RGPD
 
 ### 4.1.1 Analyse des risques (DICP)
 * **Risque 1 (Confidentialité) :** Vol ou fuite des données personnelles des clients ou des experts (noms, adresses, mots de passe).
@@ -150,14 +150,14 @@ END;
 
 ---
 
-## 💻 Missions 5 & 6 – Pôle Pratique (Prototypage & Challenges)
+##  Missions 5 & 6 – Pôle Pratique (Prototypage & Challenges)
 
 Le dépôt contient l'implémentation complète du prototype applicatif :
 - **Base de données SQL (`sql/restiloc_db.sql`)** : Structure + Données générées + Triggers de sécurité.
 - **API REST PHP (`api/`)** : Webservice PHP sécurisé via PDO (lutte contre injections SQL) renvoyant du JSON.
 - **Client Lourd JavaFX (`src/main/`)** : Interface graphique consommant l'API (parse le JSON et peuple une `TableView`).
 
-### 🛡️ Preuves des Challenges de Cybersécurité (Mission 6)
+###  Preuves des Challenges de Cybersécurité (Mission 6)
 1. **La Faille IDOR démontrée** : Nous avons forcé le client JavaFX à requêter `idExpert=2` (Sherlock Holmes) à la place de l'expert connecté (Lupin), prouvant la nécessité d'implémenter des Jetons (Tokens de Session).
 2. **Audit de sécurité fonctionnel** : Toute exécution de `DELETE FROM missionexpertise` est interceptée silencieusement par le Trigger SQL qui inscrit l'auteur et la date dans `AUDIT_SUPPRESSION`.
 3. **Logique métier "Absences"** : Ajout d'un système visuel permettant aux experts de signaler instantanément l'indisponibilité d'un client. Changement dynamique du modèle (`Mission.boolean indisponible`) avec application au layout visuel en temps-réel (RowFactory en rouge).
