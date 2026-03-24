@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Console de test API - RestiLoc</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #1a1a2e;
+            color: #e0e0e0;
+            padding: 30px;
+            min-height: 100vh;
+        }
+
+        h1 {
+            font-size: 1.6rem;
+            color: #4fc3f7;
+            margin-bottom: 8px;
+        }
+
+        p {
+            color: #aaa;
+            margin-bottom: 24px;
+            font-size: 0.95rem;
+        }
+
+        code {
+            color: #ffb74d;
+            font-family: monospace;
+        }
+
+        .card {
+            background: #16213e;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 14px;
+            border-left: 5px solid #4fc3f7;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .card.error {
+            border-left-color: #ef5350;
+        }
+
+        .card.warn {
+            border-left-color: #ffb74d;
+        }
+
+        .card strong {
+            font-size: 1rem;
+            color: #fff;
+        }
+
+        .card span {
+            font-size: 0.85rem;
+            color: #90a4ae;
+        }
+
+        a.btn {
+            display: inline-block;
+            margin-top: 6px;
+            padding: 8px 18px;
+            background: #4fc3f7;
+            color: #000;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+            width: fit-content;
+        }
+
+        a.btn:hover {
+            background: #81d4fa;
+        }
+
+        a.btn.red {
+            background: #ef5350;
+            color: #fff;
+        }
+
+        a.btn.red:hover {
+            background: #e57373;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            color: #81d4fa;
+            margin: 28px 0 12px;
+            border-bottom: 1px solid #263238;
+            padding-bottom: 6px;
+        }
+
+        .result-box {
+            background: #0d0d1a;
+            border-radius: 8px;
+            padding: 14px;
+            margin-top: 10px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: #a5d6a7;
+            min-height: 60px;
+            white-space: pre-wrap;
+            word-break: break-all;
+            display: none;
+        }
+
+        button.fetch-btn {
+            background: #263238;
+            color: #80cbc4;
+            border: 1px solid #37474f;
+            border-radius: 6px;
+            padding: 7px 16px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-top: 4px;
+            transition: background 0.2s;
+        }
+
+        button.fetch-btn:hover {
+            background: #37474f;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>🔍 Console de test API — RestiLoc</h1>
+    <p>
+        Testez le service Web <code>getLesMissionsByIdExpert.php</code>
+        directement depuis votre navigateur.
+    </p>
+
+    <!-- === Tests normaux === -->
+    <div class="section-title">✅ Tests valides</div>
+
+    <div class="card">
+        <strong>Expert ID 1 — Arsène Lupin</strong>
+        <span>Doit retourner les missions du jour pour Lupin</span>
+        <a class="btn" href="../api/getLesMissionsByIdExpert.php?idExpert=1" target="_blank">
+            Ouvrir dans un nouvel onglet
+        </a>
+        <button class="fetch-btn" onclick="fetchAndShow('../api/getLesMissionsByIdExpert.php?idExpert=1', 'res1')">
+            Afficher le résultat ici ▼
+        </button>
+        <div class="result-box" id="res1"></div>
+    </div>
+
+    <div class="card">
+        <strong>Expert ID 2 — Sherlock Holmes</strong>
+        <span>Test de la valeur utilisée dans le Document 9 (MainActivity.java)</span>
+        <a class="btn" href="../api/getLesMissionsByIdExpert.php?idExpert=2" target="_blank">
+            Ouvrir dans un nouvel onglet
+        </a>
+        <button class="fetch-btn" onclick="fetchAndShow('../api/getLesMissionsByIdExpert.php?idExpert=2', 'res2')">
+            Afficher le résultat ici ▼
+        </button>
+        <div class="result-box" id="res2"></div>
+    </div>
+
+    <div class="card">
+        <strong>Expert ID 3 — Hercule Poirot</strong>
+        <span>Doit retourner les missions du jour pour Poirot</span>
+        <a class="btn" href="../api/getLesMissionsByIdExpert.php?idExpert=3" target="_blank">
+            Ouvrir dans un nouvel onglet
+        </a>
+        <button class="fetch-btn" onclick="fetchAndShow('../api/getLesMissionsByIdExpert.php?idExpert=3', 'res3')">
+            Afficher le résultat ici ▼
+        </button>
+        <div class="result-box" id="res3"></div>
+    </div>
+
+    <!-- === Tests d'erreur === -->
+    <div class="section-title">❌ Tests d'erreur (sécurité)</div>
+
+    <div class="card error">
+        <strong>ID non numérique — Injection SQL simulée</strong>
+        <span>Doit retourner un code HTTP 400 et un message d'erreur JSON</span>
+        <a class="btn red" href="../api/getLesMissionsByIdExpert.php?idExpert=invalid" target="_blank">
+            Tester la protection ▶
+        </a>
+        <button class="fetch-btn"
+            onclick="fetchAndShow('../api/getLesMissionsByIdExpert.php?idExpert=invalid', 'res4')">
+            Afficher le résultat ici ▼
+        </button>
+        <div class="result-box" id="res4"></div>
+    </div>
+
+    <div class="card warn">
+        <strong>Faille IDOR (Mission 6 - Challenge 1)</strong>
+        <span>Un expert malveillant peut-il voir les missions des autres ? Modifiez l'ID :</span>
+        <a class="btn" href="../api/getLesMissionsByIdExpert.php?idExpert=4" target="_blank">
+            Expert ID 4 (Jules Maigret)
+        </a>
+    </div>
+
+    <script>
+        async function fetchAndShow(url, targetId) {
+            const box = document.getElementById(targetId);
+            box.style.display = 'block';
+            box.textContent = 'Chargement...';
+            try {
+                const res = await fetch(url);
+                const text = await res.text();
+                try {
+                    box.textContent = JSON.stringify(JSON.parse(text), null, 2);
+                } catch {
+                    box.textContent = text;
+                }
+            } catch (e) {
+                box.textContent = '❌ Erreur réseau : ' + e.message;
+            }
+        }
+    </script>
+
+</body>
+
+</html>

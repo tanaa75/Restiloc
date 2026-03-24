@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.Button?>
+
+<!--
+    Interface graphique du prototype RestiLoc (JavaFX).
+    Reproduit l'affichage de l'application Android mobile (Document 8).
+    Le contrôleur associé est MissionsController.java.
+-->
+<VBox spacing="12" alignment="CENTER"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="fr.restiloc.controller.MissionsController"
+      style="-fx-padding: 20; -fx-background-color: #1a1a2e;">
+
+    <!-- Titre -->
+    <Label text="🔍 RestiLoc — Missions du jour"
+           style="-fx-font-size: 20px; -fx-font-weight: bold;
+                  -fx-text-fill: #4fc3f7; -fx-font-family: 'Segoe UI';"/>
+
+    <!-- Sous-titre avec la date (renseigné par le contrôleur) -->
+    <Label fx:id="lblDate"
+           style="-fx-font-size: 13px; -fx-text-fill: #90a4ae;"/>
+
+    <!-- Tableau des missions -->
+    <TableView fx:id="tableMissions" VBox.vgrow="ALWAYS"
+               style="-fx-background-color: #16213e; -fx-border-color: #263238;
+                      -fx-border-radius: 6; -fx-table-cell-border-color: #263238;">
+        <columns>
+            <TableColumn fx:id="colHeure"  text="Heure"           prefWidth="90"/>
+            <TableColumn fx:id="colVille"  text="Ville"           prefWidth="140"/>
+            <TableColumn fx:id="colGarage" text="Garage"          prefWidth="200"/>
+            <TableColumn fx:id="colImmat"  text="Immatriculation" prefWidth="150"/>
+        </columns>
+    </TableView>
+
+    <!-- Boutons d'action -->
+    <HBox spacing="15" alignment="CENTER">
+        <Button text="🔄 Actualiser" onAction="#chargerDonnees"
+                style="-fx-background-color: #4fc3f7; -fx-text-fill: #000;
+                       -fx-font-weight: bold; -fx-padding: 8 20;
+                       -fx-border-radius: 6; -fx-background-radius: 6;
+                       -fx-cursor: hand;"/>
+
+        <!-- Challenge 3 : Nouveau bouton Indisponible -->
+        <Button text="❌ Marquer Indisponible" onAction="#marquerIndisponible"
+                style="-fx-background-color: transparent; -fx-text-fill: #ef5350;
+                       -fx-border-color: #ef5350; -fx-font-weight: bold;
+                       -fx-padding: 7 19; -fx-border-radius: 6; -fx-background-radius: 6;
+                       -fx-cursor: hand;"/>
+    </HBox>
+
+    <!-- Statut / messages d'erreur -->
+    <Label fx:id="lblStatut"
+           style="-fx-font-size: 13px; -fx-text-fill: #ef5350;"/>
+
+</VBox>
