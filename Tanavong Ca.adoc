@@ -1,0 +1,93 @@
+= Correction Personnalisée - TP Étude de Cas RestiLoc
+:author: Correction pour M. Tanavong Ca
+:toc: left
+:toc-title: Sommaire
+:icons: font
+
+Bonjour M. Ca.
+
+Le travail fourni sur l'étude de cas RestiLoc est d'une bonne qualité. Vous avez traité l'intégralité du sujet, de la modélisation à la programmation orientée objet, en passant par l'audit de sécurité et le prototypage pratique. Les questions de synthèse démontrent une bonne prise de recul, malgré quelques légères imprécisions de vocabulaire sur l'architecture.
+
+Le problème majeur est l'absence de validation: vous devez me solliciter pour que je m'assurer que vous maitrisiez les réponses des IA. Quand je viens vous voir, vous repoussez l'échéance. Pour améliorer vos prochaines notes il faudra prouver que vous maitriser les réponses.
+
+Pareil pour les prototypes, je ne les ai pas vu fonctionner.
+
+Voici le détail factuel de votre évaluation.
+
+---
+
+== Mission 1 : Modélisation des prestations (PREE)
+
+**Votre réponse :** Modélisation relationnelle textuelle avec héritage par tables filles (`PREE`, `PREE_Peinture`, `PREE_Piece`).
+
+[NOTE]
+.Évaluation - Très bien
+====
+Votre schéma relationnel est propre et rigoureux. La définition des clés primaires composites (PK) et des clés étrangères (FK) traduit parfaitement l'héritage d'entités en base de données relationnelle.
+====
+
+== Mission 2 : Gestion des rendez-vous (C#)
+
+**Vos réponses :** Justification de l'abstraction et implémentation des méthodes C#.
+
+[NOTE]
+.Évaluation - Excellent
+====
+* **Abstraction (2.1) :** La justification est exacte. Le concept de factorisation et d'interdiction d'instanciation est bien présenté.
+* **Algorithmique (2.2 à 2.5) :** Le code est robuste et propre. L'utilisation systématique de la vérification de nullité (`if (exp.GetIndisponibilite() != null)`) prouve que vous anticipez les erreurs d'exécution (les fameuses `NullReferenceException`). C'est une excellente pratique professionnelle.
+====
+
+== Mission 3 : Application et Architecture
+
+**Vos réponses :** Requêtes SQL et corrections de bugs (PHP et Java).
+
+[NOTE]
+.Évaluation - Validé
+====
+* **SQL (3.1) :** Les trois requêtes d'extraction et d'agrégation sont parfaitement fonctionnelles. Le filtrage post-regroupement (`HAVING COUNT(M.idMission) > 100`) est bien maîtrisé.
+* **Corrections de code (3.3) :** Vous avez identifié avec précision les deux couches impactées par le bug d'affichage (la clause `SELECT` du backend PHP et la méthode `setText` du frontend Java).
+====
+
+== Mission 4 : Cybersécurité et RGPD
+
+**Vos réponses :** Audit DICP, requêtes préparées PDO, faille IDOR et Trigger MySQL.
+
+[NOTE]
+.Évaluation - Très bien
+====
+* **Théorie (DICP) :** Les risques de confidentialité et d'intégrité sont bien identifiés, et la notion de "Preuve" pour la photographie est exacte.
+* *Petite remarque de numérotation :* Vous avez mélangé le titre de la question 4.2.1 (Données personnelles/sensibles) avec la réponse au hachage, mais le contenu a bien été traité dans votre synthèse finale.
+* **Sécurisation PHP (4.3) :** L'explication de l'injection SQL ("OR 1=1") est claire, tout comme celle de la faille IDOR. La réécriture via `PDO::prepare` est la solution attendue.
+* **Base de données (4.4.1) :** Le Trigger est fonctionnel. L'utilisation du mot-clé `OLD` indique que vous avez travaillé sous MySQL/MariaDB pour votre prototype, ce qui est tout à fait correct.
+Le contexte (Transact SQL) faisait cependant référence à SQL Server où la syntaxe est différente.
+====
+
+== Missions 5 & 6 : Prototypage et Challenges
+
+**Votre réponse :** Développement du prototype (API PHP, JavaFX, Base SQL, mise en évidence de la faille IDOR et ajout visuel de l'indisponibilité).
+
+[NOTE]
+.Évaluation - Bien
+====
+Le fait d'avoir poussé l'étude jusqu'à la réalisation concrète du client lourd, de l'API REST et de la gestion dynamique des couleurs (RowFactory) prouve votre implication et valide vos compétences.
+Montrez moi les prototypes qui fonctionnent lundi prochain pour améliorer votre note.
+====
+
+== Questions de synthèse
+
+**Vos réponses :** Explications détaillées des 10 concepts théoriques.
+
+[WARNING]
+.Remarque - Précisions sémantiques
+====
+Vos réponses sont globalement justes et montrent une bonne compréhension, mais attention à la formulation :
+
+* **Question 3 (Architecture) :** Vous écrivez : _"Le client JavaFX envoie directement des requêtes SQL au serveur PHP"_. C'est techniquement **faux**. Le client JavaFX envoie des **requêtes HTTP** (REST). C'est le serveur PHP qui génère et envoie la requête SQL au SGBD.
+* **Question 9 (Trigger) :** Vous expliquez que le trigger s'exécute _"JUSTE AVANT"_ la suppression. Pourtant, vous l'avez codé en `AFTER DELETE`. Même s'il s'exécute après, le SGBD conserve bien les anciennes données dans la table virtuelle (`OLD` ou `deleted`) le temps de la transaction.
+====
+
+== Conclusion
+
+Note estimée : **15 / 20**
+
+Un travail solide, complet et abouti. Il manque la validation avec moi pour m'assurer que vous maitrisez les réponses données et que le prototype est fonctionnel
